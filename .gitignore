@@ -1,0 +1,8 @@
+node_modules
+.env
+.credentials
+
+output
+
+client_secret.json
+package-lock.json
