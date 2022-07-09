@@ -29,18 +29,18 @@ Now we can create actual credentials
 
 
 
-<a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/step1.png?token=GHSAT0AAAAAABRI33PTSPDNND2N5XVUXDTUYWJ3ZRQ" target="_blank" >
+<a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/step1.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/step1.png?token=GHSAT0AAAAAABRI33PTSPDNND2N5XVUXDTUYWJ3ZRQ">
+        <img  width="800px" src = "img/step1.png">
     </p>
     <p align = "center">
         Login page
     </p>
 </a>
 
-<a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/create_project.png?token=GHSAT0AAAAAABRI33PSJZAAUHW7UIHZLOFCYWJ3Z6A" target="_blank" >
+<a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/create_project.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/create_project.png?token=GHSAT0AAAAAABRI33PSJZAAUHW7UIHZLOFCYWJ3Z6A">
+        <img  width="800px" src = "img/create_project.png">
     </p>
     <p align = "center">
         Create Porject
@@ -48,45 +48,45 @@ Now we can create actual credentials
 </a>
 
 
- <a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/api_enabled.png?token=GHSAT0AAAAAABRI33PSUFRHUQXNWO7AQ55GYWJ323Q" target="_blank" >
+ <a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/api_enabled.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/api_enabled.png?token=GHSAT0AAAAAABRI33PSUFRHUQXNWO7AQ55GYWJ323Q">
+        <img  width="800px" src = "img/api_enabled.png">
     </p>
     <p align = "center">
         Api Enabled
     </p>
 </a>
 
- <a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/go_to_credentials.png?token=GHSAT0AAAAAABRI33PTITAWOJNARAOAU424YWJ32LA" target="_blank" >
+ <a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/go_to_credentials.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/go_to_credentials.png?token=GHSAT0AAAAAABRI33PTITAWOJNARAOAU424YWJ32LA">
+        <img  width="800px" src = "img/go_to_credentials.png">
     </p>
     <p align = "center">
          Go to Credentials Page
     </p>
 </a>
 
- <a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/scope_selected.png?token=GHSAT0AAAAAABRI33PSG6PICP364VZ72TDWYWJ33UQ" target="_blank" >
+ <a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/scope_selected.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/scope_selected.png?token=GHSAT0AAAAAABRI33PSG6PICP364VZ72TDWYWJ33UQ">
+        <img  width="800px" src = "img/scope_selected.png">
     </p>
     <p align = "center">
          Select Scopes
     </p>
 </a>
 
- <a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/create_consent_screen.png?token=GHSAT0AAAAAABRI33PSVYUIKAK577R6ISGSYWJ33HQ" target="_blank" >
+ <a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/create_consent_screen.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/create_consent_screen.png?token=GHSAT0AAAAAABRI33PSVYUIKAK577R6ISGSYWJ33HQ">
+        <img  width="800px" src = "img/create_consent_screen.png">
     </p>
     <p align = "center">
          Create Consent Screen
     </p>
 </a>
 
- <a href="https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/save_credentials.png?token=GHSAT0AAAAAABRI33PSEYU7KHRVP22ACTWYYWJ336A" target="_blank" >
+ <a href="https://github.com/Kos-M/tracksLiked/blob/a7362bd545790fcf99547f669f3bab65df0add29/img/save_credentials.png" target="_blank" >
     <p align="center">
-        <img  width="800px" src = "https://raw.githubusercontent.com/Kos-M/tracksLiked/6f412633011e335f947b3295116b12743646f284/img/save_credentials.png?token=GHSAT0AAAAAABRI33PSEYU7KHRVP22ACTWYYWJ336A">
+        <img  width="800px" src = "img/save_credentials.png">
     </p>
     <p align = "center">
          Save Credentials as client_secret.json
