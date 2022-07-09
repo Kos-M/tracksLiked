@@ -7,20 +7,33 @@ source .env
 videoID="$1"
 error='no'
 current_dir=$(pwd)
+YOUTUBE_DL=$(which yt-dlp)
 
 # exit -1
 set -Eeuo pipefail
 trap 'catch $? $LINENO' ERR
 trap 'interrupted' INT
 
-if  [ ! -x "$(command -v  pwgen )" ]; then
-        echo 'pwgen not installed , Abort'
-        exit
-fi
-if  [ ! -x "$(command -v  youtube-dl )" ]; then
-        echo 'youtube-dl not installed , Abort'
-        exit
-fi
+function checkDependencies(){
+    if  [ ! -x "$(command -v  pwgen )" ]; then
+            echo 'pwgen not installed , Abort'
+            exit
+    fi
+    if  [ ! -x "$(command -v  yt-dlp )" ]; then
+            echo 'yt-dlp not installed , checking for youtube-dl..'
+            if  [ -x "$(command -v  youtube-dl )" ]; then
+                YOUTUBE_DL=$(which  youtube-dl)
+                echo "Found  youtube-dl in $YOUTUBE_DL "
+                return
+            fi
+            echo 'yt-dlp and youtube-dl are not installed , install one of them to continue.. (Recommended yt-dlp)'
+            echo 'pip install youtube-dl'
+            echo 'python3 -m pip install -U yt-dlp'
+            exit
+    fi    
+}
+
+checkDependencies
 
 temp=`pwgen  10 1`
 dest="./$temp"
@@ -44,7 +57,7 @@ catch() { # foe cleaning on interrupt or error
   fi
 }
 # --ignore-errors
-youtube-dl   --prefer-ffmpeg -f 'bestaudio' \
+"$YOUTUBE_DL"  --prefer-ffmpeg -f 'bestaudio' \
  --yes-playlist  -x --audio-format mp3  --embed-thumbnail --geo-bypass  --abort-on-error \
  --audio-quality 0 -o "%(title)s.%(ext)s"  \
  --add-metadata --postprocessor-args "-id3v2_version 3"  "$videoID"
