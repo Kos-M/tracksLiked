@@ -3,7 +3,7 @@ const path = require('path')
 const readline = require('readline');
 const { google } = require('googleapis');
 const child_process = require('child_process')
-
+require('dotenv').config()
 const OAuth2 = google.auth.OAuth2;
 
 class LikedDiscover {
@@ -155,15 +155,20 @@ class LikedDiscover {
         for (let i = 0; i < pending.length; i++) {
             const video = pending[i];
             console.dir(video)
+            if ( fs.existsSync( path.join(process.env.trackDir, `${video.title}.mp3`))) { // check if track exist already
+                console.log(`Skipping ${video.title} exist in ${process.env.trackDir}`)
+                knownDownloaded.push(video)
+                fs.writeFileSync('known.json', JSON.stringify({ completed: knownDownloaded }, null, 4), () => { })
+                continue
+            }
             try{
-                const downloader =   child_process.execSync(`./download.sh ${video.id}`,   {
+                child_process.execSync(`./download.sh ${video.id}`,   {
                         shell: true,
                         cwd: process.cwd(),
                         env: process.env,
                         stdio: 'inherit',
                         encoding: 'utf-8'
                     });
-                console.dir(downloader.toString())
                 knownDownloaded.push(video)
                 fs.writeFileSync('known.json', JSON.stringify({ completed: knownDownloaded }, null, 4), () => { })
             }catch(e){
