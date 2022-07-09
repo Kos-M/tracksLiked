@@ -24,6 +24,9 @@ class LikedDiscover {
     }
 
     init() {
+        if (! fs.existsSync('client_secret.json')) {
+             throw new Error('client_secret.json not found , is requeired to authenticate!')
+        }
         const data = fs.readFileSync('client_secret.json', { encoding: 'utf8', flag: 'r' });
         this.authorizationToken = JSON.parse(data)
     }
