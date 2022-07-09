@@ -6,3 +6,5 @@ output
 
 client_secret.json
 package-lock.json
+
+known.json

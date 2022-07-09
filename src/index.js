@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path')
 const readline = require('readline');
 const { google } = require('googleapis');
+const child_process = require('child_process')
 
 const OAuth2 = google.auth.OAuth2;
 
@@ -11,19 +12,19 @@ class LikedDiscover {
         this.TOKEN_DIR = TOKEN_DIR
         this.TOKEN_PATH = TOKEN_PATH
         this.SCOPES = SCOPES
-        this.downloaded = []
+        // this.downloaded = []
         this.lastNliked = []
         this.authorizationToken = null
 
         this.getLiked = this.getLiked.bind(this)
         this.init = this.init.bind(this)
         this.downloadNewTracks = this.downloadNewTracks.bind(this)
-        
+
         this.init()
     }
 
     init() {
-        const data = fs.readFileSync('client_secret.json', {encoding:'utf8', flag:'r'});
+        const data = fs.readFileSync('client_secret.json', { encoding: 'utf8', flag: 'r' });
         this.authorizationToken = JSON.parse(data)
     }
 
@@ -101,9 +102,9 @@ class LikedDiscover {
         });
     }
 
-    getLiked(){
+    getLiked() {
         const thisIS = this
-        return new Promise((resolve , reject )=>{
+        return new Promise((resolve, reject) => {
         this.authorize(this.authorizationToken,async (auth)=>{
        
             //
@@ -111,13 +112,13 @@ class LikedDiscover {
                 fs.writeFile("./output/" + "all_liked_videos" + ".txt", "\n", { flag: 'a+' }, e => console.log(e));
                 let nextPageToken_ = null;
                 do {
-                  await  service.playlistItems.list({
+                    await service.playlistItems.list({
                         auth: auth,
                         part: 'snippet',
                         maxResults: 50,  // 50 is the max value
                         playlistId: "LL",
                         pageToken: nextPageToken_
-                    }).then( (res)=>{
+                    }).then((res) => {
                         let results = res.data.items;
                         nextPageToken_ = res.data.nextPageToken;
                         results.forEach(item => {
@@ -128,21 +129,45 @@ class LikedDiscover {
                             thisIS.lastNliked.push(video)
                         });
                     })
-    
+
                 } while (nextPageToken_ != null)
                 // console.log(thisIS.lastNliked)    
-                resolve()     
-        });
+                resolve()
+            });
 
-    })
-      
+        })
+
     }
-    downloadNewTracks(){
+    downloadNewTracks() {
         // if (this.lastNliked.length === 0 ) return;
-        const notDownloaded = this.lastNliked.map((video)=> ! this.downloaded.includes(video.id))
-        console.log(`totalLiked: ${this.lastNliked.length} notDownloaded : ${notDownloaded.length}`)
+        if (! fs.existsSync('known.json')) {
+            fs.writeFileSync('known.json', JSON.stringify({ completed: [] }, null, 4), () => { })
+         }
+        const knownDownloaded = JSON.parse(fs.readFileSync('known.json', { encoding: 'utf8' }))?.completed
+        const pending = this.lastNliked.filter(video => !knownDownloaded.some(known => video.id ===  known.id))
+        console.dir(knownDownloaded.length)
+        console.dir(pending.length)
+        console.dir(this.lastNliked.length)
+        for (let i = 0; i < pending.length; i++) {
+            const video = pending[i];
+            console.dir(video)
+            try{
+                const downloader =   child_process.execSync(`./download.sh ${video.id}`,   {
+                        shell: true,
+                        cwd: process.cwd(),
+                        env: process.env,
+                        stdio: 'inherit',
+                        encoding: 'utf-8'
+                    });
+                console.dir(downloader.toString())
+                knownDownloaded.push(video)
+                fs.writeFileSync('known.json', JSON.stringify({ completed: knownDownloaded }, null, 4), () => { })
+            }catch(e){
+                console.log('message '+e.message)
+            }
+        }
+        console.log(`totalLiked: ${this.lastNliked.length} pending : ${pending.length} tracksOwned:${knownDownloaded.length}`)
     }
 }
-
 
 module.exports = LikedDiscover
