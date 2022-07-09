@@ -5,6 +5,8 @@ const { google } = require('googleapis');
 const child_process = require('child_process')
 require('dotenv').config()
 const OAuth2 = google.auth.OAuth2;
+const moment = require("moment");
+const ms = require('ms')
 
 class LikedDiscover {
 
@@ -24,8 +26,8 @@ class LikedDiscover {
     }
 
     init() {
-        if (! fs.existsSync('client_secret.json')) {
-             throw new Error('client_secret.json not found , is requeired to authenticate!')
+        if (!fs.existsSync('client_secret.json')) {
+            throw new Error('client_secret.json not found , is requeired to authenticate!')
         }
         const data = fs.readFileSync('client_secret.json', { encoding: 'utf8', flag: 'r' });
         this.authorizationToken = JSON.parse(data)
@@ -109,27 +111,41 @@ class LikedDiscover {
     getLiked() {
         const thisIS = this
         return new Promise((resolve, reject) => {
-        this.authorize(this.authorizationToken,async (auth)=>{
-                var service = google.youtube('v3');
+            this.authorize(this.authorizationToken, async (auth) => {
+                const service = google.youtube('v3');
                 let nextPageToken_ = null;
                 do {
-                    await service.playlistItems.list({
+                    const res = await service.playlistItems.list({
                         auth: auth,
                         part: 'snippet',
                         maxResults: 50,  // 50 is the max value
                         playlistId: "LL",
                         pageToken: nextPageToken_
-                    }).then((res) => {
-                        let results = res.data.items;
-                        nextPageToken_ = res.data.nextPageToken;
-                        results.forEach(item => {
-                            const video = {
-                                title: item.snippet.title,
-                                id: item.snippet.resourceId.videoId
-                            }
-                            thisIS.lastNliked.push(video)
-                        });
                     })
+                    let results = res.data.items;
+                    nextPageToken_ = res.data.nextPageToken;
+                    for (let resI = 0; resI < results.length; resI++) {
+                        const item = results[resI];
+                        const video = {
+                            title: item.snippet.title,
+                            id: item.snippet.resourceId.videoId
+                        }
+                        if (process.env.skip_tracks_over_duration) {
+                            const vidResp = await service.videos.list({
+                                auth,
+                                id: video.id,
+                                part: 'contentDetails'
+                            })
+                            const durationISO = vidResp.data.items[0]?.contentDetails?.duration
+                            const momentDuration = moment.duration(durationISO);
+                            if (momentDuration.asMilliseconds() > ms(process.env.skip_tracks_over_duration)) {
+                                console.log(`> skipp [${video.id}] duration ${ms(momentDuration.asMilliseconds(), { long: true })}  ${video.title} , exceeds time limit from config.`)
+                                continue
+                            }
+                        }
+                        thisIS.lastNliked.push(video)
+                    }
+
 
                 } while (nextPageToken_ != null)
                 // console.log(thisIS.lastNliked)    
@@ -141,35 +157,33 @@ class LikedDiscover {
     }
     downloadNewTracks() {
         // if (this.lastNliked.length === 0 ) return;
-        if (! fs.existsSync('known.json')) {
+        if (!fs.existsSync('known.json')) {
             fs.writeFileSync('known.json', JSON.stringify({ completed: [] }, null, 4), () => { })
-         }
+        }
         const knownDownloaded = JSON.parse(fs.readFileSync('known.json', { encoding: 'utf8' }))?.completed
-        const pending = this.lastNliked.filter(video => !knownDownloaded.some(known => video.id ===  known.id))
-        console.dir(knownDownloaded.length)
-        console.dir(pending.length)
-        console.dir(this.lastNliked.length)
+        const pending = this.lastNliked.filter(video => !knownDownloaded.some(known => video.id === known.id))
+        console.log(`known: ${knownDownloaded.length} pending: ${pending.length} likedTotal: ${this.lastNliked.length}`)
         for (let i = 0; i < pending.length; i++) {
             const video = pending[i];
             console.dir(video)
-            if ( fs.existsSync( path.join(process.env.trackDir, `${video.title}.mp3`))) { // check if track exist already
+            if (fs.existsSync(path.join(process.env.trackDir, `${video.title}.mp3`))) { // check if track exist already
                 console.log(`Skipping ${video.title} exist in ${process.env.trackDir}`)
                 knownDownloaded.push(video)
                 fs.writeFileSync('known.json', JSON.stringify({ completed: knownDownloaded }, null, 4), () => { })
                 continue
             }
-            try{
-                child_process.execSync(`./download.sh ${video.id}`,   {
-                        shell: true,
-                        cwd: process.cwd(),
-                        env: process.env,
-                        stdio: 'inherit',
-                        encoding: 'utf-8'
-                    });
+            try {
+                child_process.execSync(`./download.sh ${video.id}`, {
+                    shell: true,
+                    cwd: process.cwd(),
+                    env: process.env,
+                    stdio: 'inherit',
+                    encoding: 'utf-8'
+                });
                 knownDownloaded.push(video)
                 fs.writeFileSync('known.json', JSON.stringify({ completed: knownDownloaded }, null, 4), () => { })
-            }catch(e){
-                console.log('message '+e.message)
+            } catch (e) {
+                console.log('message ' + e.message)
             }
             console.log(`> TotalLiked: ${this.lastNliked.length} Pending : ${pending.length} Tracks From Playlist:${knownDownloaded.length}`)
         }
