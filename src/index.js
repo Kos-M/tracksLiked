@@ -43,11 +43,11 @@ class LikedDiscover {
         const clientId = credentials.installed.client_id;
         const redirectUrl = credentials.installed.redirect_uris[0];
         const oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
-
+        const thisIS = this
         // Check if we have previously stored a token.
         fs.readFile(this.TOKEN_PATH, function (err, token) {
             if (err) {
-                this.getNewToken(oauth2Client, callback);
+                thisIS.getNewToken(oauth2Client, callback);
             } else {
                 oauth2Client.credentials = JSON.parse(token);
                 callback(oauth2Client);
@@ -68,6 +68,7 @@ class LikedDiscover {
             scope: this.SCOPES
         });
         console.log('Authorize this app by visiting this url: ', authUrl);
+        const thisIS = this
         var rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
@@ -80,7 +81,7 @@ class LikedDiscover {
                     return;
                 }
                 oauth2Client.credentials = token;
-                this.storeToken(token);
+                thisIS.storeToken(token);
                 callback(oauth2Client);
             });
         });
