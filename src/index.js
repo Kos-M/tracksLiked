@@ -110,10 +110,7 @@ class LikedDiscover {
         const thisIS = this
         return new Promise((resolve, reject) => {
         this.authorize(this.authorizationToken,async (auth)=>{
-       
-            //
                 var service = google.youtube('v3');
-                fs.writeFile("./output/" + "all_liked_videos" + ".txt", "\n", { flag: 'a+' }, e => console.log(e));
                 let nextPageToken_ = null;
                 do {
                     await service.playlistItems.list({
@@ -174,8 +171,8 @@ class LikedDiscover {
             }catch(e){
                 console.log('message '+e.message)
             }
+            console.log(`> TotalLiked: ${this.lastNliked.length} Pending : ${pending.length} Tracks From Playlist:${knownDownloaded.length}`)
         }
-        console.log(`totalLiked: ${this.lastNliked.length} pending : ${pending.length} tracksOwned:${knownDownloaded.length}`)
     }
 }
 
