@@ -1,5 +1,6 @@
-
-# 
+ TracksLiked is a youtube-dl / yt-dlp wrapper , uses youtube data api v3 to query Liked playlist of account   <br>
+ has access to and then starts download all tracks/videos , as mp3 with best available quality , <br> 
+adding also meta data to mp3 such as thumbnail artists , song info and more..
     
 ## Quick Start
 Steps in tracksLiked:
