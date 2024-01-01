@@ -46,6 +46,12 @@ class LikedDiscover {
         const redirectUrl = credentials.installed.redirect_uris[0];
         const oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl);
         const thisIS = this
+
+        oauth2Client.on('tokens', (tokens) => {
+            console.info('token event:');
+            console.info(tokens);
+            oauth2Client.credentials = tokens;
+          });
         // Check if we have previously stored a token.
         fs.readFile(this.TOKEN_PATH, function (err, token) {
             if (err) {

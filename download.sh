@@ -8,11 +8,17 @@ videoID="$1"
 error='no'
 current_dir=$(pwd)
 YOUTUBE_DL=$(which yt-dlp)
-
-# exit -1
+CURRENT_MONTH_YEAR=$( date "+%b_%Y" )
+#
 set -Eeuo pipefail
 trap 'catch $? $LINENO' ERR
 trap 'interrupted' INT
+
+function checkCreateDest() {
+	if [ ! -d "$trackDir/$CURRENT_MONTH_YEAR" ] ; then
+		mkdir -p "$trackDir/$CURRENT_MONTH_YEAR"
+	fi
+}
 
 function checkDependencies(){
     if  [ ! -x "$(command -v  pwgen )" ]; then
@@ -34,6 +40,7 @@ function checkDependencies(){
 }
 
 checkDependencies
+checkCreateDest
 
 temp=`pwgen  10 1`
 dest="./$temp"
@@ -66,7 +73,7 @@ if [  "$last" -lt 0 ]; then
     error='yes'
     echo 'error detected'
 fi
-mv ./*.mp3 "$trackDir"
+mv ./*.mp3 "$trackDir/$CURRENT_MONTH_YEAR"
 cd ..
 rm -r $temp || true
 if [ "$error" == 'yes' ] ; then
